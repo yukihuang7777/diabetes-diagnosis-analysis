@@ -1,16 +1,20 @@
----
-title: "project"
-format: html
-editor: visual
----
-
-## EVA(Covarites)
+## EDA(Covarites)
 
 ```{r}
-diabetes <- read.csv('diabetes_dataset.csv')
+library(corrplot)
+library(dplyr)
 ```
 
 ```{r}
+# load the data and select variabls in research question
+diabetes <- read.csv('diabetes_dataset.csv')
+diabetes <- diabetes %>% 
+  select(Outcome,Glucose,HbA1c,FamilyHistory,MedicationUse)
+```
+
+```{r}
+# check if there are missing values and summarize dataset
+colSums(is.na(diabetes))
 str(diabetes)
 summary(diabetes)
 ```
@@ -18,7 +22,7 @@ summary(diabetes)
 To explore how individual covariates may be associated with the probability of being diagnosed with diabetes, we conducted exploratory visualizations and statistical summaries. The covariates analyzed include **glucose level**, **HbA1c level**, **family history of diabetes**, and **medication use**.
 
 ```{r}
-diabetes <- as.data.frame(diabetes)
+# boxplot between Glucose and Outcome
 boxplot(Glucose ~ Outcome,
         data = diabetes,
         main = "Glucose Level by Diabetes Status",
@@ -30,6 +34,7 @@ boxplot(Glucose ~ Outcome,
 This pattern aligns with clinical understanding, where elevated blood glucose is a primary indicator of diabetes. The visual evidence strongly supports the inclusion of glucose level as a key predictor in modeling diabetes diagnosis.
 
 ```{r}
+# boxplot between HbA1c and Outcome
 boxplot(HbA1c ~ Outcome,
         data = diabetes,
         main = "HbA1c Level by Diabetes Status",
@@ -42,9 +47,10 @@ boxplot(HbA1c ~ Outcome,
 Individuals diagnosed with diabetes tend to have significantly higher **glucose** and **HbA1c** levels, are more likely to have a **family history of diabetes**, and report **greater medication use**, highlighting all four as strong indicators of disease presence.
 
 ```{r}
+# barplot between FamilyHistory and Proportion of Outcome
 barplot(prop.table(table(diabetes$FamilyHistory, diabetes$Outcome), 1),
         beside = TRUE,
-        col = c("lightgreen", "orange"),
+        col = c("lightblue", "salmon"),
         legend = c("No Diabetes", "Diabetes"),
         names.arg = c("No Family History", "Family History"),
         main = "Proportion of Diabetes by Family History",
@@ -52,13 +58,13 @@ barplot(prop.table(table(diabetes$FamilyHistory, diabetes$Outcome), 1),
 
 ```
 
-The barplot shows that individuals **without a family history** of diabetes are overwhelmingly non-diabetic, while those **with a family history** are predominantly diagnosed with diabetes.
-This strong contrast suggests that family history is a powerful categorical predictor of diabetes risk.
+The barplot shows that individuals **without a family history** of diabetes are overwhelmingly non-diabetic, while those **with a family history** are predominantly diagnosed with diabetes. This strong contrast suggests that family history is a powerful categorical predictor of diabetes risk.
 
 ```{r}
+# barplot between MedicationUse and Proportion of Outcome
 barplot(prop.table(table(diabetes$MedicationUse, diabetes$Outcome), 1),
         beside = TRUE,
-        col = c("lightgreen", "orange"),
+        col = c("lightblue", "salmon"),
         legend = c("No Diabetes", "Diabetes"),
         names.arg = c("No Medication", "Using Medication"),
         main = "Proportion of Diabetes by Medication Use",
@@ -66,5 +72,11 @@ barplot(prop.table(table(diabetes$MedicationUse, diabetes$Outcome), 1),
 
 ```
 
-The barplot shows that individuals **using medication** have a higher proportion of diabetes compared to those **not on medication**, who are more likely to be non-diabetic.
-This pattern reflects expected treatment behavior, where medication use is closely linked to a diabetes diagnosis.
+The barplot shows that individuals **using medication** have a higher proportion of diabetes compared to those **not on medication**, who are more likely to be non-diabetic. This pattern reflects expected treatment behavior, where medication use is closely linked to a diabetes diagnosis.
+
+## EDA(Heatmap)
+
+```{R}
+# heatmap for selected data
+corrplot(cor(diabetes), method = "color", addCoef.col = "black")
+```
