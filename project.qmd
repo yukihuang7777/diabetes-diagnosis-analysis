@@ -1,4 +1,4 @@
-## EDA(Covarites)
+# Group17 Analysis Code
 
 ```{r}
 library(corrplot)
@@ -8,121 +8,157 @@ library(dplyr)
 ```{r}
 # load the data and select variabls in research question
 diabetes <- read.csv('diabetes_dataset.csv')
-
 ```
+
+## Data Cleaning
 
 ```{r}
 # check if there are missing values and summarize dataset
 colSums(is.na(diabetes))
-str(diabetes)
 summary(diabetes)
 ```
 
-To explore how individual covariates may be associated with the probability of being diagnosed with diabetes, we conducted exploratory visualizations and statistical summaries. The covariates analyzed include **glucose level**, **HbA1c level**, **family history of diabetes**, and **medication use**.
-
 ```{r}
-# boxplot between Glucose and Outcome
-boxplot(Glucose ~ Outcome,
-        data = diabetes,
-        main = "Glucose Level by Diabetes Status",
-        xlab = "Diabetes (0 = No, 1 = Yes)",
-        ylab = "Glucose Level",
-        col = c("lightblue", "salmon"))
+# In reality, LDL and HDL must larger than 0.
+# mutate categorical variables to factor
+diabetes_clean <- diabetes %>%
+  filter(LDL>0, HDL>0) %>%
+  mutate(Outcome = factor(Outcome, levels=c(0,1), labels=c("No Diabetes","Diabetes")),
+         FamilyHistory = factor(FamilyHistory, levels=c(0,1), labels=c("No Diabetes History","Has Diabetes History")),
+         DietType = factor(DietType, levels=c(0,1,2), labels=c("Unbalanced", "Balanced", "Vegan")),
+         Hypertension = factor(Hypertension, levels=c(0,1), labels=c("No Hypertension","Hypertension")),
+         MedicationUse = factor(MedicationUse, levels=c(0,1), labels=c("Not Taking Medicine","Taking Medicine")))
+summary(diabetes_clean)
 ```
 
-This pattern aligns with clinical understanding, where elevated blood glucose is a primary indicator of diabetes. The visual evidence strongly supports the inclusion of glucose level as a key predictor in modeling diabetes diagnosis.
+## EDA
+
+### Heatmap (Correlation between some covariates)
 
 ```{r}
-# boxplot between HbA1c and Outcome
-boxplot(HbA1c ~ Outcome,
-        data = diabetes,
-        main = "HbA1c Level by Diabetes Status",
-        xlab = "Diabetes (0 = No, 1 = Yes)",
-        ylab = "HbA1c Level",
-        col = c("lightblue", "salmon"))
+# The correlation of BMI, WaistCircumference, HipCircumference and WHR (All of them are obesity indicators).
+# The correlation of Glucose and HbA1c (Both of them are sugar blood indicators).
+cor_obesity <- diabetes_clean %>%
+  select(BMI, WaistCircumference, HipCircumference, WHR)
+cor_sugar <- diabetes_clean %>%
+  select(Glucose, HbA1c)
 
-```
+corrplot(cor(cor_obesity), method = "color", addCoef.col = "white")
+title("Figure 1: Correlation Matrix of BMI, WaistCircumference, HipCircumference and WHR", cex.main = 0.9)
 
-Individuals diagnosed with diabetes tend to have significantly higher **glucose** and **HbA1c** levels, are more likely to have a **family history of diabetes**, and report **greater medication use**, highlighting all four as strong indicators of disease presence.
-
-```{r}
-# barplot between FamilyHistory and Proportion of Outcome
-barplot(prop.table(table(diabetes$FamilyHistory, diabetes$Outcome), 1),
-        beside = TRUE,
-        col = c("lightblue", "salmon"),
-        legend = c("No Diabetes", "Diabetes"),
-        names.arg = c("No Family History", "Family History"),
-        main = "Proportion of Diabetes by Family History",
-        ylab = "Proportion")
-
-```
-
-The barplot presents the proportion of diabetes by **medication use**, which also shows only moderate variation between groups. Moreover, **medication use** likely occurs after diagnosis, making it a consequence rather than a predictive factor.
-
-```{r}
-# barplot between MedicationUse and Proportion of Outcome
-barplot(prop.table(table(diabetes$MedicationUse, diabetes$Outcome), 1),
-        beside = TRUE,
-        col = c("lightblue", "salmon"),
-        legend = c("No Diabetes", "Diabetes"),
-        names.arg = c("No Medication", "Using Medication"),
-        main = "Proportion of Diabetes by Medication Use",
-        ylab = "Proportion")
-
-```
-
-The barplot shows a boxplot of **BMI** by Diabetes Status, revealing only a marginal difference in median **BMI** between the two groups, with substantial overlap. This indicates limited discriminative power for predicting diabetes in this dataset.
-
-```{r}
-boxplot(diabetes$BMI ~ Outcome,
-        data = diabetes,
-        main = "BMI by Diabetes Status",
-        xlab = "Diabetes (0 = No, 1 = Yes)",
-        ylab = "BMI",
-        col = c("lightblue", "salmon"))
-```
-
-```{r}
-clean_data <- diabetes[!is.na(diabetes$Hypertension) & !is.na(diabetes$Outcome), ]
-
-# 创建交叉表
-htn_tab <- table(clean_data$Hypertension, clean_data$Outcome)
-
-# 计算比例
-htn_prop <- prop.table(htn_tab, 1)
-
-# 绘图
-barplot(htn_prop,
-        beside = TRUE,
-        col = c("skyblue", "tomato"),
-        legend = c("No Diabetes", "Diabetes"),
-        names.arg = c("No Hypertension", "Has Hypertension"),
-        main = "Proportion of Diabetes by Hypertension Status",
-        ylab = "Proportion")
-
-```
-
-## EDA(Heatmap)
-
-```{r}
-diabetes <- diabetes %>% 
-  select(Outcome,Glucose,HbA1c,FamilyHistory,MedicationUse)
+corrplot(cor(cor_sugar), method = "color", addCoef.col = "white")
+title("Figure 2: Correlation Matrix of Glucose and HbA1c", cex.main = 0.9)
 ```
 
 ```{R}
-# heatmap for selected data
-corrplot(cor(diabetes), method = "color", addCoef.col = "black")
+# drop WaistCircumference, HipCircumference and Glucose
+diabetes_selected <- diabetes_clean %>%
+  select(-WaistCircumference, -HipCircumference, -Glucose)
+```
+
+### Covariate
+
+```{r}
+# boxplots for response and continuous covariate
+
+# boxplot between Age and Outcome
+boxplot(Age ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 3: Age by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Age",
+        col = c("lightblue", "salmon"))
+
+# boxplot between Pregnancies and Outcome
+boxplot(Pregnancies ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 4: Pregnancies by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "The number of pregnant times",
+        col = c("lightblue", "salmon"))
+
+# boxplot between BMI and Outcome
+boxplot(BMI ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 5: BMI by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Body Mass Index (kg/m²)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between BloodPressure and Outcome
+boxplot(BloodPressure ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 6: BloodPressure by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Systolic blood pressure (mmHg)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between HbA1c and Outcome
+boxplot(HbA1c ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 7: HbA1c Level by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "HbA1c Level (%)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between LDL and Outcome
+boxplot(LDL ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 8: LDL by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Low-Density Lipoprotein (mg/dL)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between HDL and Outcome
+boxplot(HDL ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 9: HDL by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "High-Density Lipoprotein (mg/dL)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between Triglycerides and Outcome
+boxplot(Triglycerides ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 10: Triglycerides by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Fat levels in the blood (mg/dL)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between WHR and Outcome
+boxplot(WHR ~ Outcome,
+        data = diabetes_selected,
+        main = "Figure 11: WHR by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Waist circumference divided by hip circumference",
+        col = c("lightblue", "salmon"))
 ```
 
 ```{r}
-plot(diabetes$Glucose, diabetes$HbA1c,
-     main = "Relationship between Glucose and HbA1c",
-     xlab = "Glucose",
-     ylab = "HbA1c",
-     pch = 19, col = "darkgray")
-abline(lm(HbA1c ~ Glucose, data = diabetes), col = "blue", lwd = 2)
+# contingency tables for response and categorical covariate
 
+# contingency table for Outcome and FamilyHistory
+table(diabetes_selected$Outcome, diabetes_selected$FamilyHistory)
+print("Tabel 1: Contingency Table of Outcome and FamilyHistory")
+
+# contingency table for Outcome and DietType
+table(diabetes_selected$Outcome, diabetes_selected$DietType)
+print("Tabel 2: Contingency Table of Outcome and DietType")
+
+# contingency table for Outcome and Hypertension
+table(diabetes_selected$Outcome, diabetes_selected$Hypertension)
+print("Tabel 3: Contingency Table of Outcome and Hypertension")
+
+# contingency table for Outcome and MedicationUse
+table(diabetes_selected$Outcome, diabetes_selected$MedicationUse)
+print("Tabel 4: Contingency Table of Outcome and MedicationUse")
 ```
 
-Although the individual correlations between **Glucose** and **Outcome** (0.17), and between **HbA1c** and **Outcome** (0.15), appear relatively weak, the correlation between **Glucose** and **HbA1c** themselves is substantially high (0.82).\
-Therefore, this study seeks to investigate whether the strong **covariation** between Glucose and HbA1c may influence the model outcome when both variables are included, either individually or jointly.
+```{R}
+# Drop Pregnancies, LDL, HDL, Triglycerides, WHR (nearly no difference) and Hypertension (imbalance).
+diabetes_selected_eda <- diabetes_selected %>%
+  select(-Pregnancies, -LDL, -HDL, -Triglycerides, -WHR, -Hypertension)
+summary(diabetes_selected_eda)
+```
+
+## Statistical Analysis
