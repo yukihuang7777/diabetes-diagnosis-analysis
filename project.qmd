@@ -3,6 +3,8 @@
 ```{r}
 library(corrplot)
 library(dplyr)
+library(leaps)
+library(car)
 ```
 
 ```{r}
@@ -133,32 +135,88 @@ boxplot(WHR ~ Outcome,
         ylab = "Waist circumference divided by hip circumference",
         col = c("lightblue", "salmon"))
 ```
+```{R}
+# Log transformation to BMI, BloodPressure, Hb1Ac (reduce outlier)
+diabetes_scaled <- diabetes_selected %>%
+  mutate(BMI = log(BMI), BloodPressure = log(BloodPressure), HbA1c = log(HbA1c))
+
+# boxplot between log(BMI) and Outcome
+boxplot(BMI ~ Outcome,
+        data = diabetes_scaled,
+        main = "Figure 12: log(BMI) by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Log Transformation of Body Mass Index (kg/m²)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between log(BloodPressure) and Outcome
+boxplot(BloodPressure ~ Outcome,
+        data = diabetes_scaled,
+        main = "Figure 13: log(BloodPressure) by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Log Transformation of Systolic blood pressure (mmHg)",
+        col = c("lightblue", "salmon"))
+
+# boxplot between log(HbA1c) and Outcome
+boxplot(HbA1c ~ Outcome,
+        data = diabetes_scaled,
+        main = "Figure 14: log(HbA1c Level) by Diabetes Status",
+        xlab = "Diabetes",
+        ylab = "Log Transformation of HbA1c Level (%)",
+        col = c("lightblue", "salmon"))
+```
 
 ```{r}
 # contingency tables for response and categorical covariate
 
 # contingency table for Outcome and FamilyHistory
-table(diabetes_selected$Outcome, diabetes_selected$FamilyHistory)
+table(diabetes_scaled$Outcome, diabetes_scaled$FamilyHistory)
 print("Tabel 1: Contingency Table of Outcome and FamilyHistory")
 
 # contingency table for Outcome and DietType
-table(diabetes_selected$Outcome, diabetes_selected$DietType)
+table(diabetes_scaled$Outcome, diabetes_scaled$DietType)
 print("Tabel 2: Contingency Table of Outcome and DietType")
 
 # contingency table for Outcome and Hypertension
-table(diabetes_selected$Outcome, diabetes_selected$Hypertension)
+table(diabetes_scaled$Outcome, diabetes_scaled$Hypertension)
 print("Tabel 3: Contingency Table of Outcome and Hypertension")
 
 # contingency table for Outcome and MedicationUse
-table(diabetes_selected$Outcome, diabetes_selected$MedicationUse)
+table(diabetes_scaled$Outcome, diabetes_scaled$MedicationUse)
 print("Tabel 4: Contingency Table of Outcome and MedicationUse")
 ```
 
 ```{R}
-# Drop Pregnancies, LDL, HDL, Triglycerides, WHR (nearly no difference) and Hypertension (imbalance).
-diabetes_selected_eda <- diabetes_selected %>%
-  select(-Pregnancies, -LDL, -HDL, -Triglycerides, -WHR, -Hypertension)
+# Drop Pregnancies, LDL, HDL, Triglycerides, WHR (nearly no difference), Hypertension (imbalance) and MedicationUse.
+diabetes_selected_eda <- diabetes_scaled %>%
+  select(-Pregnancies, -LDL, -HDL, -Triglycerides, -WHR, -Hypertension, -MedicationUse)
 summary(diabetes_selected_eda)
 ```
 
 ## Statistical Analysis
+
+### Model Selection
+
+```{R}
+#| warning: false
+# Check VIF and use backward method to choose model (base on AIC)
+full_model <- glm(Outcome ~ ., data = diabetes_selected_eda, family = binomial)
+vif(full_model)
+summary(step(full_model))
+```
+
+```{R}
+# model selected by backward mehod
+backward_selected_model <- glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory, data = diabetes_selected_eda, family = binomial)
+
+reg_interationFH <- glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory + Age*FamilyHistory, data = diabetes_selected_eda, family = binomial)
+reg_log <- glm(formula = Outcome ~ log(Age) + BMI + HbA1c + FamilyHistory + log(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
+reg_sqrt <- glm(formula = Outcome ~ sqrt(Age) + BMI + HbA1c + FamilyHistory + sqrt(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
+reg_scale <- glm(formula = Outcome ~ scale(Age) + BMI + HbA1c + FamilyHistory + scale(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
+reg_onlyInteraction <- glm(formula = Outcome ~ scale(Age) + BMI + HbA1c + scale(Age)*FamilyHistory - FamilyHistory, data = diabetes_selected_eda, family = binomial)
+
+summary(reg_interationFH)
+summary(reg_log)
+summary(reg_sqrt)
+summary(reg_scale)
+summary(reg_onlyInteraction)
+```
