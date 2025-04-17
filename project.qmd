@@ -204,7 +204,7 @@ print("Table 5: VIF for Full Logistic Model")
 ```
 
 ```{R}
-# use Cook's distance to find if there is influential point
+# use Cook's distance to find if there is influential point for full model
 cooks_rule_of_thumb <- cooks.distance(full_model)
 plot(cooks_rule_of_thumb, xlab="Individual i", ylab="Cook's Distance")
 abline(h=1, lty=2, col="red")
@@ -222,4 +222,11 @@ summary(step(full_model))
 # model selected by backward method
 backward_selected_model <- glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory, data = diabetes_selected_eda, family = binomial)
 summary(backward_selected_model)
+```
+```{R}
+# use Cook's distance to find if there is influential point for selected model
+cooks_selected_model <- cooks.distance(backward_selected_model)
+plot(cooks_selected_model, xlab="Individual i", ylab="Cook's Distance")
+abline(h=1, lty=2, col="red")
+title("Figure 16: Cook's Distance for Backward Selected Model")
 ```
