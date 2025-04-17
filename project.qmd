@@ -3,7 +3,6 @@
 ```{r}
 library(corrplot)
 library(dplyr)
-library(leaps)
 library(car)
 ```
 
@@ -194,29 +193,33 @@ summary(diabetes_selected_eda)
 
 ## Statistical Analysis
 
+### Assumption
+
+```{R}
+#| warning: false
+# fit full model and check VIF 
+full_model <- glm(Outcome ~ ., data = diabetes_selected_eda, family = binomial)
+vif(full_model)
+print("Table 5: VIF for Full Logistic Model")
+```
+
+```{R}
+# use Cook's distance to find if there is influential point
+cooks_rule_of_thumb <- cooks.distance(full_model)
+plot(cooks_rule_of_thumb, xlab="Individual i", ylab="Cook's Distance")
+abline(h=1, lty=2, col="red")
+title("Figure 15: Cook's Distance for rule-of-thumb (>1)")
+```
 ### Model Selection
 
 ```{R}
 #| warning: false
-# Check VIF and use backward method to choose model (base on AIC)
-full_model <- glm(Outcome ~ ., data = diabetes_selected_eda, family = binomial)
-vif(full_model)
+# apply backward method (based on AIc)
 summary(step(full_model))
 ```
-
 ```{R}
-# model selected by backward mehod
+#| warning: false
+# model selected by backward method
 backward_selected_model <- glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory, data = diabetes_selected_eda, family = binomial)
-
-reg_interationFH <- glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory + Age*FamilyHistory, data = diabetes_selected_eda, family = binomial)
-reg_log <- glm(formula = Outcome ~ log(Age) + BMI + HbA1c + FamilyHistory + log(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
-reg_sqrt <- glm(formula = Outcome ~ sqrt(Age) + BMI + HbA1c + FamilyHistory + sqrt(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
-reg_scale <- glm(formula = Outcome ~ scale(Age) + BMI + HbA1c + FamilyHistory + scale(Age)*FamilyHistory, data = diabetes_selected_eda, family = binomial)
-reg_onlyInteraction <- glm(formula = Outcome ~ scale(Age) + BMI + HbA1c + scale(Age)*FamilyHistory - FamilyHistory, data = diabetes_selected_eda, family = binomial)
-
-summary(reg_interationFH)
-summary(reg_log)
-summary(reg_sqrt)
-summary(reg_scale)
-summary(reg_onlyInteraction)
+summary(backward_selected_model)
 ```
