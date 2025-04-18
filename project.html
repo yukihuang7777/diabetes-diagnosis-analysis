@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="project_files/libs/quarto-html/quarto.js"></script>
+<script src="project_files/libs/quarto-html/popper.min.js"></script>
+<script src="project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="project_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="project_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="group17-analysis-code" class="level1">
+<h1>Group17 Analysis Code</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.95 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'car'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    recode</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data and select variabls in research question</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>diabetes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'diabetes_dataset.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if there are missing values and summarize dataset</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Age        Pregnancies                BMI            Glucose 
+                 0                  0                  0                  0 
+     BloodPressure              HbA1c                LDL                HDL 
+                 0                  0                  0                  0 
+     Triglycerides WaistCircumference   HipCircumference                WHR 
+                 0                  0                  0                  0 
+     FamilyHistory           DietType       Hypertension      MedicationUse 
+                 0                  0                  0                  0 
+           Outcome 
+                 0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(diabetes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Age         Pregnancies          BMI           Glucose     
+ Min.   :18.00   Min.   : 0.000   Min.   :15.00   Min.   : 50.0  
+ 1st Qu.:36.00   1st Qu.: 4.000   1st Qu.:22.87   1st Qu.: 91.0  
+ Median :53.00   Median : 8.000   Median :27.05   Median :106.0  
+ Mean   :53.58   Mean   : 7.986   Mean   :27.05   Mean   :106.1  
+ 3rd Qu.:72.00   3rd Qu.:12.000   3rd Qu.:31.18   3rd Qu.:121.0  
+ Max.   :89.00   Max.   :16.000   Max.   :49.66   Max.   :207.2  
+ BloodPressure        HbA1c            LDL             HDL        
+ Min.   : 60.00   Min.   :4.000   Min.   :-12.0   Min.   : -9.20  
+ 1st Qu.: 74.00   1st Qu.:4.300   1st Qu.: 80.1   1st Qu.: 39.70  
+ Median : 84.00   Median :4.600   Median : 99.9   Median : 50.20  
+ Mean   : 84.48   Mean   :4.651   Mean   :100.1   Mean   : 49.95  
+ 3rd Qu.: 94.00   3rd Qu.:5.000   3rd Qu.:120.2   3rd Qu.: 60.20  
+ Max.   :138.00   Max.   :6.900   Max.   :202.2   Max.   :107.80  
+ Triglycerides   WaistCircumference HipCircumference      WHR        
+ Min.   : 50.0   Min.   : 40.30     Min.   : 54.8    Min.   :0.4200  
+ 1st Qu.:117.2   1st Qu.: 83.40     1st Qu.: 94.0    1st Qu.:0.8200  
+ Median :150.6   Median : 93.80     Median :103.2    Median :0.9100  
+ Mean   :151.1   Mean   : 93.95     Mean   :103.1    Mean   :0.9174  
+ 3rd Qu.:185.1   3rd Qu.:104.60     3rd Qu.:112.1    3rd Qu.:1.0100  
+ Max.   :345.8   Max.   :163.00     Max.   :156.6    Max.   :1.4900  
+ FamilyHistory       DietType       Hypertension      MedicationUse  
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.000000   Min.   :0.000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.000000   1st Qu.:0.000  
+ Median :0.0000   Median :0.0000   Median :0.000000   Median :0.000  
+ Mean   :0.3025   Mean   :0.4862   Mean   :0.001048   Mean   :0.405  
+ 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.000000   3rd Qu.:1.000  
+ Max.   :1.0000   Max.   :2.0000   Max.   :1.000000   Max.   :1.000  
+    Outcome      
+ Min.   :0.0000  
+ 1st Qu.:0.0000  
+ Median :0.0000  
+ Mean   :0.3441  
+ 3rd Qu.:1.0000  
+ Max.   :1.0000  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In reality, LDL and HDL must larger than 0.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate categorical variables to factor</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>diabetes_clean <span class="ot">&lt;-</span> diabetes <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(LDL<span class="sc">&gt;</span><span class="dv">0</span>, HDL<span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Outcome =</span> <span class="fu">factor</span>(Outcome, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"No Diabetes"</span>,<span class="st">"Diabetes"</span>)),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">FamilyHistory =</span> <span class="fu">factor</span>(FamilyHistory, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"No Diabetes History"</span>,<span class="st">"Has Diabetes History"</span>)),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">DietType =</span> <span class="fu">factor</span>(DietType, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Unbalanced"</span>, <span class="st">"Balanced"</span>, <span class="st">"Vegan"</span>)),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">Hypertension =</span> <span class="fu">factor</span>(Hypertension, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"No Hypertension"</span>,<span class="st">"Hypertension"</span>)),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">MedicationUse =</span> <span class="fu">factor</span>(MedicationUse, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Not Taking Medicine"</span>,<span class="st">"Taking Medicine"</span>)))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(diabetes_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Age         Pregnancies          BMI           Glucose     
+ Min.   :18.00   Min.   : 0.000   Min.   :15.00   Min.   : 50.0  
+ 1st Qu.:36.00   1st Qu.: 4.000   1st Qu.:22.88   1st Qu.: 91.0  
+ Median :53.00   Median : 8.000   Median :27.05   Median :106.0  
+ Mean   :53.56   Mean   : 7.987   Mean   :27.05   Mean   :106.1  
+ 3rd Qu.:72.00   3rd Qu.:12.000   3rd Qu.:31.18   3rd Qu.:121.0  
+ Max.   :89.00   Max.   :16.000   Max.   :49.66   Max.   :207.2  
+ BloodPressure        HbA1c            LDL             HDL        
+ Min.   : 60.00   Min.   :4.000   Min.   :  0.3   Min.   :  0.60  
+ 1st Qu.: 74.00   1st Qu.:4.300   1st Qu.: 80.1   1st Qu.: 39.70  
+ Median : 84.00   Median :4.600   Median : 99.9   Median : 50.20  
+ Mean   : 84.48   Mean   :4.651   Mean   :100.2   Mean   : 49.99  
+ 3rd Qu.: 94.00   3rd Qu.:5.000   3rd Qu.:120.2   3rd Qu.: 60.20  
+ Max.   :138.00   Max.   :6.900   Max.   :202.2   Max.   :107.80  
+ Triglycerides   WaistCircumference HipCircumference      WHR        
+ Min.   : 50.0   Min.   : 40.30     Min.   : 54.8    Min.   :0.4200  
+ 1st Qu.:117.2   1st Qu.: 83.40     1st Qu.: 94.0    1st Qu.:0.8200  
+ Median :150.6   Median : 93.80     Median :103.2    Median :0.9100  
+ Mean   :151.2   Mean   : 93.95     Mean   :103.1    Mean   :0.9174  
+ 3rd Qu.:185.1   3rd Qu.:104.60     3rd Qu.:112.1    3rd Qu.:1.0100  
+ Max.   :345.8   Max.   :163.00     Max.   :156.6    Max.   :1.4900  
+              FamilyHistory        DietType             Hypertension 
+ No Diabetes History :6643   Unbalanced:5787   No Hypertension:9516  
+ Has Diabetes History:2883   Balanced  :2846   Hypertension   :  10  
+                             Vegan     : 893                         
+                                                                     
+                                                                     
+                                                                     
+             MedicationUse         Outcome    
+ Not Taking Medicine:5671   No Diabetes:6246  
+ Taking Medicine    :3855   Diabetes   :3280  
+                                              
+                                              
+                                              
+                                              </code></pre>
+</div>
+</div>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<section id="heatmap-correlation-between-some-covariates" class="level3">
+<h3 class="anchored" data-anchor-id="heatmap-correlation-between-some-covariates">Heatmap (Correlation between some covariates)</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The correlation of BMI, WaistCircumference, HipCircumference and WHR (All of them are obesity indicators).</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The correlation of Glucose and HbA1c (Both of them are sugar blood indicators).</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>cor_obesity <span class="ot">&lt;-</span> diabetes_clean <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(BMI, WaistCircumference, HipCircumference, WHR)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>cor_sugar <span class="ot">&lt;-</span> diabetes_clean <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Glucose, HbA1c)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(cor_obesity), <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">addCoef.col =</span> <span class="st">"white"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Figure 1: Correlation Matrix of BMI, WaistCircumference, HipCircumference and WHR"</span>, <span class="at">cex.main =</span> <span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(cor_sugar), <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">addCoef.col =</span> <span class="st">"white"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Figure 2: Correlation Matrix of Glucose and HbA1c"</span>, <span class="at">cex.main =</span> <span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop WaistCircumference, HipCircumference and Glucose</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>diabetes_selected <span class="ot">&lt;-</span> diabetes_clean <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>WaistCircumference, <span class="sc">-</span>HipCircumference, <span class="sc">-</span>Glucose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="covariate" class="level3">
+<h3 class="anchored" data-anchor-id="covariate">Covariate</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots for response and continuous covariate</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between Age and Outcome</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Age <span class="sc">~</span> Outcome,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 3: Age by Diabetes Status"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Age"</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between Pregnancies and Outcome</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Pregnancies <span class="sc">~</span> Outcome,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 4: Pregnancies by Diabetes Status"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"The number of pregnant times"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between BMI and Outcome</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(BMI <span class="sc">~</span> Outcome,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 5: BMI by Diabetes Status"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Body Mass Index (kg/m²)"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between BloodPressure and Outcome</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(BloodPressure <span class="sc">~</span> Outcome,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 6: BloodPressure by Diabetes Status"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Systolic blood pressure (mmHg)"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between HbA1c and Outcome</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(HbA1c <span class="sc">~</span> Outcome,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 7: HbA1c Level by Diabetes Status"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"HbA1c Level (%)"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between LDL and Outcome</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(LDL <span class="sc">~</span> Outcome,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 8: LDL by Diabetes Status"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Low-Density Lipoprotein (mg/dL)"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between HDL and Outcome</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(HDL <span class="sc">~</span> Outcome,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 9: HDL by Diabetes Status"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"High-Density Lipoprotein (mg/dL)"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between Triglycerides and Outcome</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Triglycerides <span class="sc">~</span> Outcome,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 10: Triglycerides by Diabetes Status"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Fat levels in the blood (mg/dL)"</span>,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-8.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between WHR and Outcome</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(WHR <span class="sc">~</span> Outcome,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_selected,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 11: WHR by Diabetes Status"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Waist circumference divided by hip circumference"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-7-9.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log transformation to BMI, BloodPressure, Hb1Ac (reduce outlier)</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>diabetes_scaled <span class="ot">&lt;-</span> diabetes_selected <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BMI =</span> <span class="fu">log</span>(BMI), <span class="at">BloodPressure =</span> <span class="fu">log</span>(BloodPressure), <span class="at">HbA1c =</span> <span class="fu">log</span>(HbA1c))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between log(BMI) and Outcome</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(BMI <span class="sc">~</span> Outcome,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_scaled,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 12: log(BMI) by Diabetes Status"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Log Transformation of Body Mass Index (kg/m²)"</span>,</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between log(BloodPressure) and Outcome</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(BloodPressure <span class="sc">~</span> Outcome,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_scaled,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 13: log(BloodPressure) by Diabetes Status"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Log Transformation of Systolic blood pressure (mmHg)"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot between log(HbA1c) and Outcome</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(HbA1c <span class="sc">~</span> Outcome,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> diabetes_scaled,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Figure 14: log(HbA1c Level) by Diabetes Status"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Log Transformation of HbA1c Level (%)"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"salmon"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-8-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency tables for response and categorical covariate</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table for Outcome and FamilyHistory</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_scaled<span class="sc">$</span>Outcome, diabetes_scaled<span class="sc">$</span>FamilyHistory)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              No Diabetes History Has Diabetes History
+  No Diabetes                6246                    0
+  Diabetes                    397                 2883</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Tabel 1: Contingency Table of Outcome and FamilyHistory"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Tabel 1: Contingency Table of Outcome and FamilyHistory"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table for Outcome and DietType</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_scaled<span class="sc">$</span>Outcome, diabetes_scaled<span class="sc">$</span>DietType)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              Unbalanced Balanced Vegan
+  No Diabetes       3761     1887   598
+  Diabetes          2026      959   295</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Tabel 2: Contingency Table of Outcome and DietType"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Tabel 2: Contingency Table of Outcome and DietType"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table for Outcome and Hypertension</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_scaled<span class="sc">$</span>Outcome, diabetes_scaled<span class="sc">$</span>Hypertension)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              No Hypertension Hypertension
+  No Diabetes            6244            2
+  Diabetes               3272            8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Tabel 3: Contingency Table of Outcome and Hypertension"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Tabel 3: Contingency Table of Outcome and Hypertension"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table for Outcome and MedicationUse</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_scaled<span class="sc">$</span>Outcome, diabetes_scaled<span class="sc">$</span>MedicationUse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              Not Taking Medicine Taking Medicine
+  No Diabetes                3864            2382
+  Diabetes                   1807            1473</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Tabel 4: Contingency Table of Outcome and MedicationUse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Tabel 4: Contingency Table of Outcome and MedicationUse"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop Pregnancies, LDL, HDL, Triglycerides, WHR (nearly no difference), Hypertension (imbalance) and MedicationUse.</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>diabetes_selected_eda <span class="ot">&lt;-</span> diabetes_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Pregnancies, <span class="sc">-</span>LDL, <span class="sc">-</span>HDL, <span class="sc">-</span>Triglycerides, <span class="sc">-</span>WHR, <span class="sc">-</span>Hypertension, <span class="sc">-</span>MedicationUse)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(diabetes_selected_eda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Age             BMI        BloodPressure       HbA1c      
+ Min.   :18.00   Min.   :2.708   Min.   :4.094   Min.   :1.386  
+ 1st Qu.:36.00   1st Qu.:3.130   1st Qu.:4.304   1st Qu.:1.459  
+ Median :53.00   Median :3.298   Median :4.431   Median :1.526  
+ Mean   :53.56   Mean   :3.273   Mean   :4.422   Mean   :1.532  
+ 3rd Qu.:72.00   3rd Qu.:3.440   3rd Qu.:4.543   3rd Qu.:1.609  
+ Max.   :89.00   Max.   :3.905   Max.   :4.927   Max.   :1.932  
+              FamilyHistory        DietType           Outcome    
+ No Diabetes History :6643   Unbalanced:5787   No Diabetes:6246  
+ Has Diabetes History:2883   Balanced  :2846   Diabetes   :3280  
+                             Vegan     : 893                     
+                                                                 
+                                                                 
+                                                                 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="statistical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-analysis">Statistical Analysis</h2>
+<section id="assumption" class="level3">
+<h3 class="anchored" data-anchor-id="assumption">Assumption</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit full model and check VIF </span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>full_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(Outcome <span class="sc">~</span> ., <span class="at">data =</span> diabetes_selected_eda, <span class="at">family =</span> binomial)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(full_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  GVIF Df GVIF^(1/(2*Df))
+Age           1.322554  1        1.150023
+BMI           1.607113  1        1.267720
+BloodPressure 1.530938  1        1.237311
+HbA1c         1.005822  1        1.002907
+FamilyHistory 1.000002  1        1.000001
+DietType      1.009900  2        1.002466</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Table 5: VIF for Full Logistic Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Table 5: VIF for Full Logistic Model"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Cook's distance to find if there is influential point for full model</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>cooks_rule_of_thumb <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(full_model)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cooks_rule_of_thumb, <span class="at">xlab=</span><span class="st">"Individual i"</span>, <span class="at">ylab=</span><span class="st">"Cook's Distance"</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">1</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Figure 15: Cook's Distance for rule-of-thumb (&gt;1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-selection" class="level3">
+<h3 class="anchored" data-anchor-id="model-selection">Model Selection</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># apply backward method (based on AIc)</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">step</span>(full_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=1357.47
+Outcome ~ Age + BMI + BloodPressure + HbA1c + FamilyHistory + 
+    DietType</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Df Deviance     AIC
+- DietType       2   1341.5  1353.5
+- BloodPressure  1   1341.5  1355.5
+&lt;none&gt;               1341.5  1357.5
+- BMI            1   1428.4  1442.4
+- Age            1   1429.1  1443.1
+- HbA1c          1   2002.9  2016.9
+- FamilyHistory  1  12050.0 12064.0</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Step:  AIC=1353.49
+Outcome ~ Age + BMI + BloodPressure + HbA1c + FamilyHistory</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Df Deviance     AIC
+- BloodPressure  1   1341.5  1351.5
+&lt;none&gt;               1341.5  1353.5
+- BMI            1   1429.0  1439.0
+- Age            1   1429.3  1439.3
+- HbA1c          1   2003.7  2013.7
+- FamilyHistory  1  12051.5 12061.5</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Step:  AIC=1351.54
+Outcome ~ Age + BMI + HbA1c + FamilyHistory</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Df Deviance     AIC
+&lt;none&gt;               1341.5  1351.5
+- Age            1   1448.3  1456.3
+- BMI            1   1471.6  1479.6
+- HbA1c          1   2003.7  2011.7
+- FamilyHistory  1  12051.7 12059.7</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory, family = binomial, 
+    data = diabetes_selected_eda)
+
+Coefficients:
+                                    Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                       -65.345361   2.830783 -23.084   &lt;2e-16 ***
+Age                                 0.045101   0.004765   9.465   &lt;2e-16 ***
+BMI                                 5.182670   0.500767  10.349   &lt;2e-16 ***
+HbA1c                              25.738070   1.331783  19.326   &lt;2e-16 ***
+FamilyHistoryHas Diabetes History  31.830442 414.543323   0.077    0.939    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 12266.8  on 9525  degrees of freedom
+Residual deviance:  1341.5  on 9521  degrees of freedom
+AIC: 1351.5
+
+Number of Fisher Scoring iterations: 20</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model selected by backward method</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>backward_selected_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> Outcome <span class="sc">~</span> Age <span class="sc">+</span> BMI <span class="sc">+</span> HbA1c <span class="sc">+</span> FamilyHistory, <span class="at">data =</span> diabetes_selected_eda, <span class="at">family =</span> binomial)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward_selected_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Outcome ~ Age + BMI + HbA1c + FamilyHistory, family = binomial, 
+    data = diabetes_selected_eda)
+
+Coefficients:
+                                    Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                       -65.345361   2.830783 -23.084   &lt;2e-16 ***
+Age                                 0.045101   0.004765   9.465   &lt;2e-16 ***
+BMI                                 5.182670   0.500767  10.349   &lt;2e-16 ***
+HbA1c                              25.738070   1.331783  19.326   &lt;2e-16 ***
+FamilyHistoryHas Diabetes History  31.830442 414.543323   0.077    0.939    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 12266.8  on 9525  degrees of freedom
+Residual deviance:  1341.5  on 9521  degrees of freedom
+AIC: 1351.5
+
+Number of Fisher Scoring iterations: 20</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Cook's distance to find if there is influential point for selected model</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>cooks_selected_model <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(backward_selected_model)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cooks_selected_model, <span class="at">xlab=</span><span class="st">"Individual i"</span>, <span class="at">ylab=</span><span class="st">"Cook's Distance"</span>)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">1</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Figure 16: Cook's Distance for Backward Selected Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
